@@ -3,11 +3,13 @@
   "shell": "src/ing-app/ing-app.js",
   "sources": [
     "src/*/*.*",
-    "package.json"
+    "package.json",
+    "config.js"
   ],
   "extraDependencies": [
     "manifest.json",
-    "node_modules/@webcomponents/webcomponentsjs/**"
+    "node_modules/@webcomponents/webcomponentsjs/**",
+    "config.js"
   ],
   "npm": true,
   "builds": [

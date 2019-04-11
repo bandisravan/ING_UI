@@ -73,7 +73,8 @@ class IngDetailsApp extends PolymerElement {
           data="{{routeData}}">
       </app-route>
       [[_getDetailAjax(routeData.groupId,routeData.productId)]]
-  <div class="card">     
+  <div class="card">  
+  <a href="/#/home">Back</a>   
 <h2>Produktdetails</h2>
 <hr />
 <h3>Product Group: [[productGroup.groupName]]</h3>
