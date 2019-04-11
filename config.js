@@ -1,3 +1,3 @@
 var config ={
-    "baseURL":"http://localhost:8000"
+    "baseURL":"http://13.234.186.204:9090/api/"
 }

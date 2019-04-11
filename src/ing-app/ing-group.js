@@ -13,20 +13,7 @@ class IngGroupApp extends PolymerElement {
         this.openedFlag = false;
     }
     ready(){
-        super.ready();
-        this.groupList = [
-                        {
-                        "groupId": 1000,
-                        "groupName": "Oranjespaarrekening",
-                        "products": 2
-                        },
-                        {
-                        "groupId": 1000,
-                        "groupName": "Oranjespaarrekening",
-                        "products": 2
-                        }
-                    ];
-        
+        super.ready();        
     }
   static get template() {
     return html`
@@ -47,9 +34,13 @@ class IngGroupApp extends PolymerElement {
             padding:20px;
             border:1px #ccc solid;
         }
+        .productNameList{
+            text-decoration:none;
+            color:#000;
+        }
       </style>
-      <iron-ajax id="groupAjax" url="_getConfig('getGroup')" handle-as="json" method="GET" on-response="_handleGroupResponse"></iron-ajax>
-      <iron-ajax id="productListAjax" url="_getConfig('products')" method="POST" handle-as="json" on-response="_handleProductsResponse"></iron-ajax>
+      <iron-ajax  auto id="groupAjax" url="[[configUrl]]getGroup" handle-as="json" method="GET" on-response="_handleGroupResponse"></iron-ajax>
+      <iron-ajax id="productListAjax" url="[[configUrl]]products" method="POST" handle-as="json" on-response="_handleProductsResponse"></iron-ajax>
   <div class="card">
       <vaadin-accordion opened="[[openedFlag]]">
       <template is="dom-repeat" items="[[groupList]]">
@@ -58,7 +49,7 @@ class IngGroupApp extends PolymerElement {
     
     <div>
     <template is="dom-repeat" items="[[productList]]" as="products">
-    <paper-item>[[products.productName]]</paper-item>
+    <paper-item><a class="productNameList" href="/#/details/[[item.groupId]]/[[products.productId]]">[[products.productName]]</a></paper-item>
 
     </template>
     </div>
@@ -84,10 +75,14 @@ class IngGroupApp extends PolymerElement {
       },
       productList:{
           type:Object
+      },
+      configUrl:{
+          type:String,
+          value: config.baseURL
       }
     };
   }
-  _getConfig(path){
+  getConfig(path){
       return config.baseURL+'/'+path;
   }
   _handleGroupResponse(e){
@@ -95,29 +90,19 @@ class IngGroupApp extends PolymerElement {
       this.groupList = resp;
   }
   _getProducts(e){
-      
-      let resp = e.detail.response;
       let groupId = e.target.getAttribute('id');
-      /*let data = {
+      let data = {
             "groupId": groupId
       }
       this.$.productListAjax.body = JSON.stringify(data);
       this.$.productListAjax.contentType = 'application/json';
-      this.$.productListAjax.generateRequest();*/
-      this.productList=[
-    {
-      "productId": 1000,
-      "productName": "Oranjespaarrekening"
-    },
-    {
-      "productId": 1000,
-      "productName": "Oranjespaarrekening"
-    }];
+      this.$.productListAjax.generateRequest();
 
   }
 
   _handleProductsResponse(e){
-
+      let resp = e.detail.response.productDetails;
+      this.productList = resp;
   }
 }
 
