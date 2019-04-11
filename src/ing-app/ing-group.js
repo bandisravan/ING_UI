@@ -63,7 +63,7 @@ class IngGroupApp extends PolymerElement {
     <template is="dom-repeat" items="[[productList]]" as="products">
     <paper-item class="productHeading" >
     <template is="dom-if" if="{{_checkDetails(products.special)}}">
-    <a class="productNameList" href="/#/details/[[item.groupId]]/[[products.productId]]">[[products.productName]]</a></paper-item>
+    <a class="productNameList" href="#/details/[[item.groupId]]/[[products.productId]]">[[products.productName]]</a></paper-item>
     </template>
     <template is="dom-if" if="{{!_checkDetails(products.special)}}">[[products.productName]]
     </template>

@@ -40,7 +40,7 @@ class IngApp extends PolymerElement {
     <app-toolbar>
       <div main-title>ING PRODUCT VIEWER</div>
       <iron-selector selected="0">
-        <a href="/#/home">Huis</a>
+        <a href="#/home">Huis</a>
       </iron-selector>
     </app-toolbar>
   </app-header>

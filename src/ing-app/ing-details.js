@@ -69,7 +69,7 @@ class IngDetailsApp extends PolymerElement {
       </app-route>
       [[_getDetailAjax(routeData.groupId,routeData.productId)]]
   <div class="card">  
-  <a href="/#/home" class="back">Overzicht</a>   
+  <a href="#/home" class="back">Overzicht</a>   
 <h2 class="detailsHeading">Product Details</h2>
 <hr />
 <h3 class="groupHeading">Product Group: [[productGroup.groupName]]</h3>
@@ -84,7 +84,7 @@ class IngDetailsApp extends PolymerElement {
 <div style="border:1px #ccc solid; padding:10px;">
 <h2 class="detailsHeading">Other Group Products</h2>
 <template is="dom-repeat" items="[[otherProducts]]" as="prod">
-    <p><a class="otherItems" href="/#/details/[[routeData.groupId]]/[[prod.productId]]" title="[[prod.productName]]">[[prod.productName]]</a> </p>  
+    <p><a class="otherItems" href="#/details/[[routeData.groupId]]/[[prod.productId]]" title="[[prod.productName]]">[[prod.productName]]</a> </p>  
 </template>
 </div>
 <h3></h3>
