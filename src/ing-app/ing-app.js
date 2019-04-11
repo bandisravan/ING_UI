@@ -38,17 +38,16 @@ class IngApp extends PolymerElement {
       <app-header-layout>
   <app-header slot="header" fixed>
     <app-toolbar>
-      <div main-title>ING PRODUCT VIEWER APP</div>
+      <div main-title>ING PRODUCT VIEWER</div>
       <iron-selector selected="0">
         <a href="/#/home">Home</a>
-        <a href="/#/analytics">Analytics</a>
       </iron-selector>
     </app-toolbar>
   </app-header>
   <div>
       <iron-pages selected="[[page]]" attr-for-selected="name">
         <ing-group name="home"></ing-group>
-        <ing-details route="{{subRoute}}" name="details"></ing-details>
+        <ing-details route="{{subroute}}" name="details"></ing-details>
         <ing-analytics name="analytics"></ing-analytics>
         <ing-notfound name="notFound"></ing-notfound>
       </iron-pages>

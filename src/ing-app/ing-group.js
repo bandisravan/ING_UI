@@ -17,13 +17,13 @@ class IngGroupApp extends PolymerElement {
         this.groupList = [
                         {
                         "groupId": 1000,
-                        "groupName": "Sparen",
-                        "products": 3
+                        "groupName": "Oranjespaarrekening",
+                        "products": 2
                         },
                         {
                         "groupId": 1000,
-                        "groupName": "Betalen",
-                        "products": 4
+                        "groupName": "Oranjespaarrekening",
+                        "products": 2
                         }
                     ];
         
@@ -45,14 +45,15 @@ class IngGroupApp extends PolymerElement {
             width:700px;
             margin:0 auto;
             padding:20px;
+            border:1px #ccc solid;
         }
       </style>
-      <iron-ajax id="groupAjax" url="_getConfig('groups')" handle-as="json" method="GET" on-response="_handleGroupResponse"></iron-ajax>
+      <iron-ajax id="groupAjax" url="_getConfig('getGroup')" handle-as="json" method="GET" on-response="_handleGroupResponse"></iron-ajax>
       <iron-ajax id="productListAjax" url="_getConfig('products')" method="POST" handle-as="json" on-response="_handleProductsResponse"></iron-ajax>
   <div class="card">
-      <vaadin-accordion>
+      <vaadin-accordion opened="[[openedFlag]]">
       <template is="dom-repeat" items="[[groupList]]">
-  <vaadin-accordion-panel opened$="false">
+  <vaadin-accordion-panel>
     <div slot="summary" id="[[item.groupId]]" on-click="_getProducts">[[item.groupName]] | [[item.products]]</div>
     
     <div>
@@ -78,8 +79,8 @@ class IngGroupApp extends PolymerElement {
           type: Object
       },
       openedFlag:{
-          type:Boolean,
-          value:false
+          type:Number,
+          value:null
       },
       productList:{
           type:Object
@@ -94,7 +95,6 @@ class IngGroupApp extends PolymerElement {
       this.groupList = resp;
   }
   _getProducts(e){
-      debugger;
       
       let resp = e.detail.response;
       let groupId = e.target.getAttribute('id');
@@ -107,11 +107,11 @@ class IngGroupApp extends PolymerElement {
       this.productList=[
     {
       "productId": 1000,
-      "productName": "String"
+      "productName": "Oranjespaarrekening"
     },
     {
       "productId": 1000,
-      "productName": "String"
+      "productName": "Oranjespaarrekening"
     }];
 
   }
