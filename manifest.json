@@ -1,0 +1,6 @@
+{
+  "name": "ing",
+  "short_name": "ing",
+  "start_url": "/",
+  "display": "standalone"
+}

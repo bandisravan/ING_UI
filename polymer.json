@@ -1,0 +1,25 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/ing-app/ing-app.js",
+  "sources": [
+    "src/*/*.*",
+    "package.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/**"
+  ],
+  "npm": true,
+  "builds": [
+    {
+      "name": "ing",
+      "preset": "es5-bundled"
+    }
+  ],
+  "lint": {
+    "rules": [
+      "polymer-3"
+    ]
+  }
+} 
+ 
