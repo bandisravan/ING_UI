@@ -3,6 +3,10 @@ import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
+import '@polymer/paper-tabs/paper-tabs.js';
+import '@polymer/paper-tabs/paper-tab.js';
+import '@vaadin/vaadin-grid/vaadin-grid.js';
+import '@vaadin/vaadin-grid/vaadin-grid-sort-column.js';
 import * as d3 from "d3";
 
 /**
@@ -12,23 +16,10 @@ import * as d3 from "d3";
 class IngAnalyticsApp extends PolymerElement {
     constructor(){
         super();
-        this.groupData = [
-            {
-            "groupId": 1000,
-            "groupName": "String",
-            "groupViewCount": 123
-            },
-            {
-            "groupId": 1000,
-            "groupName": "String",
-            "groupViewCount": 123
-            }
-        ]
     }
     ready(){
         super.ready();
         console.log(this.routeData);
-        this.generateBarChart()
     }
   static get template() {
     return html`
@@ -37,15 +28,37 @@ class IngAnalyticsApp extends PolymerElement {
           display: block;
         }
         .card{
-            width:700px;
+            border:1px #ccc solid;
+            width:auto;
             margin:0 auto;
             padding:20px;
         }
+        .bar{
+            fullbleed:blue;
+        }
+        paper-tabs{
+            --paper-tabs-selection-bar-color: #ff6200;
+        }
       </style>
-      <iron-ajax url="_getConfig('viewCount')" handle-as="json" on-response="_handleAnalyticsResponse"></iron-ajax>
+      <iron-ajax auto url="[[configUrl]]viewCount" method="GET" handle-as="json" on-response="_handleAnalyticsResponse"></iron-ajax>
       
-  <div class="card">     
-<svg width="600" height="500" id="groupChart"></svg>
+  <div class="card">    
+         <paper-tabs selected="{{selected}}">
+       <paper-tab>Group Analytics</paper-tab>
+       <paper-tab>Product Analytics</paper-tab>
+      </paper-tabs>
+      <iron-pages selected="{{selected}}">
+       <div>
+             <svg width="600" height="500" id="groupChart"></svg>
+       </div>
+       <div>
+               <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort items="[[productList]]">
+    <vaadin-grid-sort-column width="9em" path="productName" header="Product Name"></vaadin-grid-sort-column>
+    <vaadin-grid-sort-column width="9em" path="productViewCount" header="View Count"></vaadin-grid-sort-column>
+  </vaadin-grid>
+       </div>
+      </iron-pages>
+
   </div>
 </app-header-layout>
     `;
@@ -55,14 +68,36 @@ class IngAnalyticsApp extends PolymerElement {
       prop1: {
         type: String,
         value: 'ing-app'
+      },
+      configUrl:{
+          type:String,
+          value: config.baseURL
+      },
+      productGroupList:{
+          type:Array,
+          value:[]
+      },
+      productList:{
+          type:Array,
+          value:[]
+      },
+      selected:{
+          type:Number,
+          value:0
       }
+
     };
   }
   _getConfig(path){
       return config.baseURL+'/'+path;
   }
   _handleAnalyticsResponse(e){
-      debugger;
+      let response = e.detail.response;
+      let productList = response.productGroupList;
+       let groups = productList.map(group => ({ 'groupViewCount': group.groupViewCount, 'groupName': group.groupName }));
+      this.productGroupList = groups;
+      this.productList = response.productList;
+      this.generateBarChart();
   }
   generateBarChart(){
        var svg = d3.select(this.$.groupChart),
@@ -79,11 +114,11 @@ class IngAnalyticsApp extends PolymerElement {
 
     var xScale = d3.scaleBand().range([0, width]).padding(0.4),
         yScale = d3.scaleLinear().range([height, 0]);
-//var color = d3.scale.ordinal().range(["#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+        var color = d3.scaleLinear().range(["#df1e0e", "#ff6200", "#db4437", "#4285f4", "#6e1a07"]);
     var g = svg.append("g")
                .attr("transform", "translate(" + 100 + "," + 100 + ")");
 
-   let data =this.groupData;
+   let data =this.productGroupList;
 
         xScale.domain(data.map(function(d) { return d.groupName; }));
         yScale.domain([0, d3.max(data, function(d) { return d.groupViewCount; })]);
@@ -100,7 +135,7 @@ class IngAnalyticsApp extends PolymerElement {
 
         g.append("g")
          .call(d3.axisLeft(yScale).tickFormat(function(d){
-             return "$" + d;
+             return d;
          })
          .ticks(10))
          .append("text")
@@ -109,16 +144,16 @@ class IngAnalyticsApp extends PolymerElement {
          .attr("dy", "-5.1em")
          .attr("text-anchor", "end")
          .attr("stroke", "black")
-         .text("Stock Price");
+         .text("Count");
 
         g.selectAll(".bar")
          .data(data)
          .enter().append("rect")
-         .attr("class", "bar")
          .attr("x", function(d) { return xScale(d.groupName); })
          .attr("y", function(d) { return yScale(d.groupViewCount); })
          .attr("width", xScale.bandwidth())
-         .attr("height", function(d) { return height - yScale(d.groupViewCount); });
+         .attr("height", function(d) { return height - yScale(d.groupViewCount); })     
+         .attr("fill", function(d,i) { return color(i); });
     
   }
 }

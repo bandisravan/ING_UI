@@ -12,35 +12,6 @@ class IngDetailsApp extends PolymerElement {
     constructor() {
         super();
         this.productDetails = {
-            // "productGroup": {
-            //     "groupId": 1,
-            //     "groupName": "Sparen",
-            //     "count": 0,
-            //     "productDetails": [
-            //         {
-            //             "productId": 101,
-            //             "productName": "dd",
-            //             "productViewCount": 2,
-            //             "precentage": 2,
-            //             "special": "df",
-            //             "investmentType": "dt",
-            //             "minLimit": 442,
-            //             "maxLimit": 23,
-            //             "duration": "5"
-            //         },
-            //         {
-            //             "productId": 102,
-            //             "productName": "gj",
-            //             "productViewCount": 2,
-            //             "precentage": 5,
-            //             "special": "hgjh",
-            //             "investmentType": "hgh",
-            //             "minLimit": 56,
-            //             "maxLimit": 56,
-            //             "duration": "5"
-            //         }
-            //     ]
-            // }
 
         };
     }
@@ -63,6 +34,30 @@ class IngDetailsApp extends PolymerElement {
             width:700px;
             margin:0 auto;
             padding:20px;
+            border:1px #ccc solid;
+        }
+        .detailsHeading{
+            color:#ff6200;
+        }
+        .back{
+            color:#000;
+            font-size:18px;
+        }
+        .groupHeading{
+            font-size:20px;
+        }
+        .otherItems, .otherItems a{
+            color:#031959;
+            font-size:20px;
+            text-decoration:none;
+
+
+        }
+        .otherHeading{
+            color:#ff6200;
+        }
+        p{
+            font-size:20px;
         }
       </style>
       <iron-ajax id="productDetailsAjax" url="[[configUrl]]productDetails"  method="POST" handle-as="json" on-response="_handleProductDetailsResponse"></iron-ajax>
@@ -74,21 +69,22 @@ class IngDetailsApp extends PolymerElement {
       </app-route>
       [[_getDetailAjax(routeData.groupId,routeData.productId)]]
   <div class="card">  
-  <a href="/#/home">Back</a>   
-<h2>Produktdetails</h2>
+  <a href="/#/home" class="back">Overzicht</a>   
+<h2 class="detailsHeading">Product Details</h2>
 <hr />
-<h3>Product Group: [[productGroup.groupName]]</h3>
-    <h2> Product Name: [[selectedProducts.productName]]</h2>
+<h3 class="groupHeading">Product Group: [[productGroup.groupName]]</h3>
+    <h2 class="groupHeading"> Product Name: [[selectedProducts.productName]]</h2>
     <p>Percntage: [[selectedProducts.precentage]]</p>
     <p>special: [[selectedProducts.special]]</p>
     <p>investmentType: [[selectedProducts.investmentType]]</p>
     <p>Min Limit: [[selectedProducts.minLimit]]</p>
     <p>Max Limit: [[selectedProducts.maxLimit]]</p>
     <p>Duration: [[selectedProducts.duration]]</p>
-<div style="border:1px #ccc solid; width:400px;">
-<h3>Other group products</h3>
+    <hr />
+<div style="border:1px #ccc solid; padding:10px;">
+<h2 class="detailsHeading">Other Group Products</h2>
 <template is="dom-repeat" items="[[otherProducts]]" as="prod">
-    <h2><a href="/#/details/[[routeData.groupId]]/[[prod.productId]]">[[prod.productName]]</h2>   
+    <p><a class="otherItems" href="/#/details/[[routeData.groupId]]/[[prod.productId]]" title="[[prod.productName]]">[[prod.productName]]</a> </p>  
 </template>
 </div>
 <h3></h3>
@@ -138,7 +134,7 @@ class IngDetailsApp extends PolymerElement {
         ajaxEle.generateRequest();
     }
     _handleProductDetailsResponse(e) {
-        let resp = e.detail.response;debugger;
+        let resp = e.detail.response;
         //this.groupList = resp;
         var arr = resp.productGroup.productDetails;
         

@@ -38,18 +38,36 @@ class IngGroupApp extends PolymerElement {
             text-decoration:none;
             color:#000;
         }
+        .groupHeading{
+            font-size:20px;
+        }
+        .productHeading, .productHeading a{
+            color:#444343;
+            font-size:20px;
+        }
+        .headingOverview{
+            color:#ff6200;
+        }
+
       </style>
       <iron-ajax  auto id="groupAjax" url="[[configUrl]]getGroup" handle-as="json" method="GET" on-response="_handleGroupResponse"></iron-ajax>
       <iron-ajax id="productListAjax" url="[[configUrl]]products" method="POST" handle-as="json" on-response="_handleProductsResponse"></iron-ajax>
   <div class="card">
+  <h2 class="headingOverview">Overview ING Product Groups</h2>
       <vaadin-accordion opened="[[openedFlag]]">
       <template is="dom-repeat" items="[[groupList]]">
   <vaadin-accordion-panel>
-    <div slot="summary" id="[[item.groupId]]" on-click="_getProducts">[[item.groupName]] | [[item.products]]</div>
+    <div slot="summary" class="groupHeading" id="[[item.groupId]]" on-click="_getProducts">[[item.groupName]] | [[item.products]]</div>
     
     <div>
     <template is="dom-repeat" items="[[productList]]" as="products">
-    <paper-item><a class="productNameList" href="/#/details/[[item.groupId]]/[[products.productId]]">[[products.productName]]</a></paper-item>
+    <paper-item class="productHeading" >
+    <template is="dom-if" if="{{_checkDetails(products.special)}}">
+    <a class="productNameList" href="/#/details/[[item.groupId]]/[[products.productId]]">[[products.productName]]</a></paper-item>
+    </template>
+    <template is="dom-if" if="{{!_checkDetails(products.special)}}">[[products.productName]]
+    </template>
+    </paper-item>
 
     </template>
     </div>
@@ -98,6 +116,13 @@ class IngGroupApp extends PolymerElement {
       this.$.productListAjax.contentType = 'application/json';
       this.$.productListAjax.generateRequest();
 
+  }
+  _checkDetails(data){
+      if(data == 'null'){
+          return false;
+      }else{
+          return true;
+      }
   }
 
   _handleProductsResponse(e){
